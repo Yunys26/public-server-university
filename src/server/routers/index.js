@@ -1,16 +1,15 @@
+const { client } = require("../db");
+const groups = require("./groups");
+const journal = require("./journal");
+const students = require("./students");
+
 const routers = (app) => {
-    
-    app.get('/', (req, res) => {
-        res.send({
-            message: 'Node.js and Express REST API'
-        });
-    })
+    // API Журнал
+    journal(app);
+    // API Группы
+    groups(app);
+    // API Студентов
+    students(app);
+};
 
-    app.get('/users', (req, res) => {
-        res.send({
-            message: 'Node.js and Express REST'
-        });
-    })
-}
-
-module.exports = routers
+module.exports = routers;
