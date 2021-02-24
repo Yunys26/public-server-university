@@ -1,9 +1,11 @@
 import { combineReducers, getDefaultMiddleware, configureStore } from "@reduxjs/toolkit";
 import mainSlice from "./sliceStore/mainSlice";
+import tableSlice from "./sliceStore/tableSlice";
 
 // Главный reducer
 const rootReducer = combineReducers({
-    main: mainSlice
+    main: mainSlice,
+    table: tableSlice,
 });
 
 // Промежуточное ПО
