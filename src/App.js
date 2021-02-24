@@ -4,6 +4,7 @@ import Header from './components/Header';
 import Main from './components/Main';
 import NavBar from './components/NavBar';
 import { Container } from '@material-ui/core';
+import { Route, Switch } from 'react-router-dom';
 
 
 const App = () => {
@@ -11,11 +12,15 @@ const App = () => {
   return (
     // disableGutters - добавляет отступы справо и слево
     // maxWidth - отключает разметку по допустимой размерности
-    <Container disableGutters={false} maxWidth="xl">
-      <Header />
-      <NavBar />
-      <Main />
-    </Container>
+    <Switch>
+      <Route strict path="/">
+        <Container disableGutters={false} maxWidth="xl">
+          <Header />
+          <NavBar />
+          <Main />
+        </Container>
+      </Route>
+    </Switch>
   );
 };
 
