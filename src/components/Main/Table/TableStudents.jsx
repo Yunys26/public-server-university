@@ -30,15 +30,15 @@ const TableStudents = () => {
     };
 
     React.useEffect(() => {
-        const responseGetDataStudent = () => axios.get('http://localhost:9999/students')
+        const responseGetDataStudent = () => axios.get('http://localhost:9999/students/all/')
             .then((res) => setStudentsData(res.data))
             .catch(error => console.log(error));
         responseGetDataStudent();
     }, [])
-    console.log(studentsData)
+
     return (
         <Paper>
-            <TableContainer style={{ marginTop: '4%' }}>
+            <TableContainer>
                 <Table>
                     <TableHead>
                         <TableRow>
@@ -95,7 +95,6 @@ const TableStudents = () => {
                     </TableFooter>
                 </Table>
             </TableContainer>
-
         </Paper>
     );
 };

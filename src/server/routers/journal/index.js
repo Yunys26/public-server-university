@@ -1,11 +1,17 @@
-const { client } = require("../../db")
+const { client } = require("../../db");
+const {
+    get_all_journal,
+    get_journal_and_student,
+    get_journal_and_group,
+    change_rating_in_journal
+} = require("./query_journal");
 
 const journal = (app) => {
 
     // Просмотр записей журнала
     app.get('/journal', (req, res) => {
         client
-            .query('SELECT * FROM journal')
+            .query(get_all_journal)
             .then((response) => res.send(response.rows))
             .catch((error) => console.error(error.stack))
     });
@@ -13,18 +19,15 @@ const journal = (app) => {
     // Просмотр записей журнала по студенту
     app.get('/journal', (req, res) => {
         client
-            .query(`SELECT journal.id, journal.student_id, journal.student_plan_id, journal.in_time, journal.count, journal.mark_id
-            FROM journal  INNER JOIN student ON journal.student_id = student.id AND journal.student_id = $1`, [1])
+            .query(get_journal_and_student, [1])
             .then((response) => res.send(response.rows))
             .catch((error) => console.error(error.stack))
     });
 
     // Просмотр записей журнала по группе
-    app.get('/journal', () => {
+    app.get('/journal', (req, res) => {
         client
-            .query(`SELECT * FROM journal
-            INNER JOIN (SELECT student.id as id, student.name as name, study_group.name as group  FROM student INNER JOIN study_group ON student.study_group_id = study_group.id AND study_group.name=$1) 
-            as tmp ON journal.student_id = tmp.id`, [1])
+            .query(get_journal_and_group, [1])
             .then((response) => res.send(response.rows))
             .catch((error) => console.error(error.stack))
     });
@@ -32,12 +35,10 @@ const journal = (app) => {
     // Редактирование оценок в журнале
     app.put('/journal', () => {
         client
-        .query(`UPDATE journal SET mark_id=$1 WHERE journal.id=$2 RETURNING *`, [1, 2])
+        .query(change_rating_in_journal, [1, 2])
         .then((response) => res.send(response.rows))
         .catch((error) => console.error(error.stack))
-    }) 
-
-
+    })
 
 }
 

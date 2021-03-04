@@ -1,71 +1,98 @@
 const { client } = require("../../db");
+const {
+    get_all_studet_dept,
+    get_all_students,
+    get_student_all_journal,
+    add_students,
+    get_id_all_students,
+    get_all_students_in_group,
+    change_students,
+    delete_students
+} = require("./query_student");
+
 
 const students = (app) => {
-    // Добавление студента
-    app.post('/students', (req, res) => {
-        client
-            .query(`INSERT INTO student (surname, name, second_name, study_group_id) VALUES
-            ($1, $2, $3, (SELECT study_group.id FROM study_group WHERE study_group.name = $4))
-            RETURNING *`, [1, 2, 3])
+
+    // Получение информации о студенте в журнале
+    app.get('/students/all/journal/', (req, res) => {
+        client.query(get_student_all_journal)
             .then(response => {
                 res.send(response.rows)
             })
             .catch((error) => console.error(error.stack))
-    });
+    })
+
+    // // Добавление студента
+    // app.post('/students', (req, res) => {
+    //     client
+    //         .query(add_students, [1, 2, 3])
+    //         .then(response => {
+    //             res.send(response.rows)
+    //         })
+    //         .catch((error) => console.error(error.stack))
+    // });
 
     // Просмотр всех студентов
-    app.get('/students', (req, res) => {
+    app.get('/students/all/', (req, res) => {
         client
-            .query('SELECT * FROM student')
+            .query(get_all_students)
             .then(response => {
                 res.send(response.rows)
             })
             .catch((error) => console.error(error.stack))
     })
 
-    // Просмотр студента по id
-    app.get('/students', (req, res) => {
+    // Вывод всех студентов с долгами
+    app.get('/students/all-retakes', (req, res) => {
         client
-            .query('SELECT * FROM student WHERE id = $1', [1])
+            .query(get_all_studet_dept)
             .then(response => {
                 res.send(response.rows)
             })
             .catch((error) => console.error(error.stack))
     })
 
-    // Просмотр студентов по группе
-    app.get('/students', (req, res) => {
-        client
-            .query(`SELECT * FROM student
-            INNER JOIN study_group
-            ON student.study_group_id = study_group.id AND study_group.name = $1`, [1])
-            .then(response => {
-                res.send(response.rows)
-            })
-            .catch((error) => console.error(error.stack))
-    })
+    // // Просмотр студента по id
+    // app.get('/students', (req, res) => {
+    //     client
+    //         .query(get_id_all_students, [1])
+    //         .then(response => {
+    //             res.send(response.rows)
+    //         })
+    //         .catch((error) => console.error(error.stack))
+    // })
 
-    // Редактирование студента
-    app.get('/students', (req, res) => {
-        client
-            .query(`UPDATE student SET surname=$1, name=$2, second_name=$3, study_group_id = (SELECT id FROM study_group WHERE study_group.name = $4)
-            WHERE student.id=$5
-            RETURNING *`)
-            .then(response => {
-                res.send(response.rows)
-            })
-            .catch((error) => console.error(error.stack))
-    })
+    // // Просмотр студентов по группе
+    // app.get('/students', (req, res) => {
+    //     client
+    //         .query(get_all_students_in_group, [1])
+    //         .then(response => {
+    //             res.send(response.rows)
+    //         })
+    //         .catch((error) => console.error(error.stack))
+    // })
 
-    // Удаление студента
-    app.delete('/students', (req, res) => {
-        client
-            .query('DELETE FROM student WHERE id = $1 RETURNING *', [1])
-            .then(response => {
-                res.send(response.rows)
-            })
-            .catch((error) => console.error(error.stack))
-    })
+    // // Редактирование студента
+    // app.get('/students', (req, res) => {
+    //     client
+    //         .query(change_students, [1, 2, 3, 4, 5])
+    //         .then(response => {
+    //             res.send(response.rows)
+    //         })
+    //         .catch((error) => console.error(error.stack))
+    // })
+
+    // // Удаление студента
+    // app.delete('/students', (req, res) => {
+    //     client
+    //         .query(delete_students, [1])
+    //         .then(response => {
+    //             res.send(response.rows)
+    //         })
+    //         .catch((error) => console.error(error.stack))
+    // })
+
+    
 }
 
 module.exports = students;
