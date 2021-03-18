@@ -2,10 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 // Подключение базы данных
-const {
-    client,
-    textDB
-} = require('./db');
+const { client } = require('./db');
 // 
 const routers = require('./routers');
 // Инициализация самого приложения

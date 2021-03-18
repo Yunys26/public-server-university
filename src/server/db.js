@@ -4,6 +4,7 @@ module.exports.pool = new Pool();
 
 module.exports.client = new Client({
     host: 'localhost',
+    database: 'postgres',
     port: 5432,
     user: 'postgres',
     password: 'qwerty',
